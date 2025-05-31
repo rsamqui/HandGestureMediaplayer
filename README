@@ -1,0 +1,136 @@
+# Gesture Controlled Spotify Player 🤘🎧
+
+Controla tu reproducción de Spotify usando gestos de la mano detectados en tiempo real a través de tu cámara web. Este proyecto utiliza Python, MediaPipe para el seguimiento de manos, OpenCV para el manejo de la cámara y Spotipy para la interacción con la API de Spotify.
+
+## ✨ Características
+
+* **Control de Reproducción:** Play/Pausa, Siguiente Canción, Canción Anterior.
+* **Control de Volumen:** Subir y Bajar Volumen.
+* **Interacción con Biblioteca:** Dar "Me Gusta" y Quitar "Me Gusta" a canciones.
+* **Información Adicional:** Abrir una búsqueda de letras de la canción actual en el navegador.
+* **Feedback Visual:** Muestra los puntos de referencia de la mano y el estado actual del cooldown/gesto detectado (opcional, según la última versión del script).
+* **Cooldown Personalizable:** Diferentes tiempos de espera entre comandos según la acción realizada.
+
+## 🛠️ Tecnologías Utilizadas
+
+* **Python 3.10.x**
+* **MediaPipe:** Para la detección de manos y sus puntos de referencia.
+* **OpenCV (cv2):** Para la captura y procesamiento de video de la cámara web.
+* **Spotipy:** Para interactuar con la API Web de Spotify (controlar reproducción, dar "Me Gusta", etc.).
+* **os:** Para manejar variables de entorno (credenciales de Spotify).
+* **math:** Para cálculos matemáticos (ej. distancias).
+* **webbrowser, urllib.parse:** Para abrir el navegador y buscar letras.
+
+## 🚀 Configuración e Instalación
+
+Sigue estos pasos para poner en marcha el proyecto:
+
+1.  **Clonar el Repositorio:**
+    ```bash
+    git clone [https://github.com/rsamqui/HandGestureMediaplayer.git](https://github.com/rsamqui/HandGestureMediaplayer.git)
+    cd HandGestureMediaplayer
+    ```
+
+2.  **Crear un Entorno Virtual (Recomendado):**
+    ```bash
+    python -m venv venv
+    # En Windows
+    venv\Scripts\activate
+    # En macOS/Linux
+    source venv/bin/activate
+    ```
+
+3.  **Instalar Dependencias:**
+    Asegúrate de tener `pip` actualizado. Puedes crear un archivo `requirements.txt` con las siguientes líneas:
+    ```txt
+    opencv-python
+    mediapipe
+    spotipy
+    ```
+    Y luego instalar con:
+    ```bash
+    pip install -r requirements.txt
+    ```
+    O instalar individualmente:
+    ```bash
+    pip install opencv-python mediapipe spotipy
+    ```
+
+4.  **Configurar la Aplicación de Spotify Developer:**
+    * Ve al [Dashboard de Desarrolladores de Spotify](https://developer.spotify.com/dashboard/).
+    * Crea una nueva aplicación (o usa una existente).
+    * Copia tu `Client ID` y `Client Secret`.
+    * En la configuración de tu aplicación de Spotify, añade un **Redirect URI**. Para este proyecto, usa: `http://127.0.0.1:8888/callback`
+
+5.  **Establecer Variables de Entorno (Recomendado y más seguro):**
+    Establece las siguientes variables de entorno en tu sistema:
+    ```bash
+    SPOTIPY_CLIENT_ID="TU_CLIENT_ID"
+    SPOTIPY_CLIENT_SECRET="TU_CLIENT_SECRET"
+    SPOTIPY_REDIRECT_URI="[http://127.0.0.1:8888/callback](http://127.0.0.1:8888/callback)"
+    ```
+    Alternativamente, puedes modificar directamente estas variables en el script `mediaplayer_gestures.py` (menos seguro):
+    ```python
+    # Dentro de mediaplayer_gestures.py
+    os.environ["SPOTIPY_CLIENT_ID"] = "TU_CLIENT_ID_AQUÍ"
+    os.environ["SPOTIPY_CLIENT_SECRET"] = "TU_CLIENT_SECRET_AQUÍ"
+    os.environ["SPOTIPY_REDIRECT_URI"] = "[http://127.0.0.1:8888/callback](http://127.0.0.1:8888/callback)"
+    ```
+
+6.  **Verificar los Permisos (Scopes) de Spotify:**
+    Asegúrate de que la variable `SCOPE` en tu script `mediaplayer_gestures.py` incluya todos los permisos necesarios. Para la funcionalidad completa que hemos desarrollado, debería ser:
+    ```python
+    SCOPE = "user-modify-playback-state user-read-playback-state user-library-modify"
+    ```
+
+## ▶️ Cómo Usar
+
+1.  Asegúrate de que Spotify esté abierto y reproduciendo música en alguno de tus dispositivos (Desktop, Web Player, etc.).
+2.  Activa tu entorno virtual (si creaste uno).
+3.  Ejecuta el script principal:
+    ```bash
+    python mediaplayer_gestures.py
+    ```
+4.  **Autenticación Inicial:** La primera vez que ejecutes el script (o si cambias los `SCOPES` o borras el archivo `.cache`), se abrirá una pestaña en tu navegador pidiéndote que autorices la aplicación. Inicia sesión y acepta los permisos. Luego, copia la URL completa de la barra de direcciones (la que empieza con `http://127.0.0.1...`) y pégala en la terminal cuando se te solicite.
+5.  ¡Empieza a controlar Spotify con tus gestos! Una ventana de OpenCV mostrará la imagen de tu cámara.
+
+## 🖐️ Tabla de Gestos y Acciones
+
+| Gesto                                           | Acción             | Descripción Detallada                                      |
+| :---------------------------------------------- | :----------------- | :--------------------------------------------------------- |
+| **Mano Abierta** | Siguiente Canción  | Los 4 dedos principales extendidos, pulgar no interfiere    |
+| **Shaka (Pulgar y Meñique arriba)** | Canción Anterior   | Índice, corazón y anular cerrados, pulgar y meñique arriba |
+| **"Paz/Victoria" (Índice y Corazón arriba)** | Play/Pausa         | Anular y meñique cerrados, pulgar no arriba                |
+| **OK Sign** | Dar "Me Gusta"     | Punta del pulgar toca punta del índice, otros 3 extendidos |
+| **Forma de "L" (Pulgar e Índice arriba)** | Quitar "Me Gusta"  | Corazón, anular y meñique cerrados                         |
+| **Índice, Corazón y Meñique arriba** | Subir Volumen      | Anular cerrado, pulgar no interfiere                       |
+| **"Rock" (Índice y Meñique arriba)** | Bajar Volumen      | Corazón y anular cerrados, pulgar no interfiere            |
+| **Índice Arriba (solo)** | Mostrar Letras     | Otros 3 dedos cerrados, pulgar cerrado o no arriba         |
+
+*(Nota: La fiabilidad de la detección de gestos puede variar según la iluminación, el fondo y la claridad con la que se realice el gesto. Intenta hacer los gestos de forma clara frente a la cámara.)*
+
+## ❗ Solución de Problemas Comunes
+
+* **Error `403 Insufficient client scope` al dar "Me Gusta" / "Quitar Me Gusta":**
+    * Asegúrate de que el `SCOPE` en tu script incluye `user-library-modify`.
+    * **Borra el archivo `.cache`** (o `.cache-TU_USUARIO_SPOTIFY`) en la carpeta de tu script.
+    * Re-ejecuta el script. Te pedirá autenticarte de nuevo en el navegador. Asegúrate de aceptar los nuevos permisos.
+    * Para forzar la pantalla de diálogo de Spotify durante la autenticación (útil para depurar), puedes añadir `show_dialog=True` al constructor de `SpotifyOAuth`: `auth_manager=SpotifyOAuth(scope=SCOPE, show_dialog=True)`
+* **Gestos no detectados o detectados incorrectamente:**
+    * Asegura una buena iluminación y un fondo relativamente simple.
+    * Mantén una distancia adecuada a la cámara.
+    * Realiza los gestos de forma clara y definida.
+    * Puedes ajustar los umbrales (`min_detection_confidence`, `min_tracking_confidence` en `mp_hands.Hands()`) o la lógica dentro de `recognize_gesture()` si es necesario.
+    * Los umbrales de distancia (`OPEN_THRESHOLD`, `OK_THRESHOLD`) en `recognize_gesture()` pueden necesitar ajuste fino.
+* **No se detectan dispositivos Spotify:** Asegúrate de que Spotify esté abierto y activo en algún dispositivo antes de ejecutar el script.
+
+## 🔮 Mejoras Futuras Posibles
+
+* Interfaz Gráfica de Usuario (GUI) en lugar de solo la ventana de OpenCV.
+* Más gestos y acciones personalizables.
+* Opción para elegir qué reproductor controlar (no solo Spotify).
+* Mejorar la robustez del reconocimiento de gestos (quizás con modelos de ML entrenados).
+* Empaquetar como una aplicación ejecutable.
+---
+
+¡Disfruta controlando tu música con el poder de tus manos!
