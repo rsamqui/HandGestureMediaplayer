@@ -4,22 +4,22 @@ Controla tu reproducción de Spotify usando gestos de la mano detectados en tiem
 
 ## ✨ Características
 
-* **Control de Reproducción:** Play/Pausa, Siguiente Canción, Canción Anterior.
-* **Control de Volumen:** Subir y Bajar Volumen.
-* **Interacción con Biblioteca:** Dar "Me Gusta" y Quitar "Me Gusta" a canciones.
-* **Información Adicional:** Abrir una búsqueda de letras de la canción actual en el navegador.
-* **Feedback Visual:** Muestra los puntos de referencia de la mano y el estado actual del cooldown/gesto detectado (opcional, según la última versión del script).
-* **Cooldown Personalizable:** Diferentes tiempos de espera entre comandos según la acción realizada.
+**Control de Reproducción:** Play/Pausa, Siguiente Canción, Canción Anterior.
+**Control de Volumen:** Subir y Bajar Volumen.
+**Interacción con Biblioteca:** Dar "Me Gusta" y Quitar "Me Gusta" a canciones.
+**Información Adicional:** Abrir una búsqueda de letras de la canción actual en el navegador.
+**Feedback Visual:** Muestra los puntos de referencia de la mano y el estado actual del cooldown/gesto detectado (opcional, según la última versión del script).
+**Cooldown Personalizable:** Diferentes tiempos de espera entre comandos según la acción realizada.
 
 ## 🛠️ Tecnologías Utilizadas
 
-* **Python 3.10.x**
-* **MediaPipe:** Para la detección de manos y sus puntos de referencia.
-* **OpenCV (cv2):** Para la captura y procesamiento de video de la cámara web.
-* **Spotipy:** Para interactuar con la API Web de Spotify (controlar reproducción, dar "Me Gusta", etc.).
-* **os:** Para manejar variables de entorno (credenciales de Spotify).
-* **math:** Para cálculos matemáticos (ej. distancias).
-* **webbrowser, urllib.parse:** Para abrir el navegador y buscar letras.
+**Python 3.10.x**
+**MediaPipe:** Para la detección de manos y sus puntos de referencia.
+**OpenCV (cv2):** Para la captura y procesamiento de video de la cámara web.
+**Spotipy:** Para interactuar con la API Web de Spotify (controlar reproducción, dar "Me Gusta", etc.).
+**os:** Para manejar variables de entorno (credenciales de Spotify).
+**math:** Para cálculos matemáticos (ej. distancias).
+**webbrowser, urllib.parse:** Para abrir el navegador y buscar letras.
 
 ## 🚀 Configuración e Instalación
 
